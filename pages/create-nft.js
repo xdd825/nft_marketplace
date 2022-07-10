@@ -7,14 +7,20 @@ import { useTheme } from 'next-themes';
 import { Button } from '../components';
 import images from '../assets';
 import Input from '../components/Input';
+import { NFTContext } from '../context/NFTContext';
 
 const CreateNft = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const [formInput, setFormInput] = useState({ name: '', description: '', price: '' });
   const { theme } = useTheme();
+  const { uploadToIPFS } = useContext(NFTContext);
 
-  const onDrop = useCallback(() => {
+  const onDrop = useCallback(async (acceptedFile) => {
+    const url = await uploadToIPFS(acceptedFile[0]);
 
+    console.log(url);
+
+    setFileUrl(url);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
