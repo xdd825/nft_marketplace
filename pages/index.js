@@ -6,6 +6,7 @@ import { Banner, CreatorCard, NFTCard } from '../components';
 import { NFTContext } from '../context/NFTContext';
 import images from '../assets';
 import { makeId } from '../utils/makeId';
+import { getTopCreator } from '../utils/getTopCreator';
 
 const Home = () => {
   const [hideButtons, setHideButtons] = useState(false);
@@ -45,6 +46,8 @@ const Home = () => {
       setHideButtons(true);
     }
   };
+
+  const topCreators = getTopCreator(nfts);
 
   useEffect(() => {
     isScrollable();
