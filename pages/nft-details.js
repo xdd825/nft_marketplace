@@ -55,7 +55,7 @@ const NftDetails = () => {
   if (isLoading) return <Loader />;
 
   const checkout = async () => {
-    await buyNFT();
+    await buyNFT(nft);
 
     setPaymentModal(false);
     setSuccessModal(true);
@@ -98,6 +98,12 @@ const NftDetails = () => {
               <p className="font-poppins dark:text-white text-nft-black-1 text-base font-normal border border-gray p-2">
                 You cannot buy your own NFT
               </p>
+            ) : currentAccount === nft.owner.toLowerCase() ? (
+              <Button
+                btnName="List on Markteplace"
+                classStyles="mr-5 sm:mr-0 sm:mb-5 rounded-xl"
+                handleClick={() => router.push(`/resell-nft?tokenId=${nft.tokenId}&tokenURI=${nft.tokenURI}`)}
+              />
             ) : (
               <Button
                 btnName={`Buy for ${nft.price} ${nftCurrency}`}
@@ -117,7 +123,7 @@ const NftDetails = () => {
             <Button
               btnName="Checkout"
               classStyles="mr-5 sm:mb-5 sm:mr-0 rounded-xl"
-              handleClick={() => checkout}
+              handleClick={checkout}
             />
             <Button
               btnName="Cancel"
@@ -130,6 +136,7 @@ const NftDetails = () => {
       />
       )}
 
+      {successModal && (
       <Modal
         header="Payment Successful"
         body={(
@@ -157,7 +164,9 @@ const NftDetails = () => {
             />
           </div>
         )}
+        handleClose={() => setPaymentModal(false)}
       />
+      )}
     </div>
   );
 };

@@ -9,10 +9,7 @@ const Modal = ({ header, body, footer, handleClose }) => {
   const { theme } = useTheme();
 
   const handleClickOutSide = (e) => {
-    console.log(`Ref: ${modalRef.current.innerHTML}`);
-    console.log(`e target: ${e.target.innerHTML}}`);
-    console.log(`${modalRef.current.contains(e.target)}`);
-    if (modalRef.current) {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
       handleClose();
     }
   };
