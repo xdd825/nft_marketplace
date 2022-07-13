@@ -9,15 +9,26 @@ import { makeId } from '../utils/makeId';
 import { getTopCreator } from '../utils/getTopCreator';
 
 const Home = () => {
+  const { fetchNFTs } = useContext(NFTContext);
+
   const [hideButtons, setHideButtons] = useState(false);
   const [nfts, setNfts] = useState([]);
   const [nftsCopy, setNftsCopy] = useState([]);
   const [activeSelect, setActiveSelect] = useState('Recently added');
   const [isLoading, setIsLoading] = useState(true);
-  const theme = useTheme();
+
   const parentRef = useRef(null);
   const scrollRef = useRef(null);
-  const { fetchNFTs } = useContext(NFTContext);
+
+  const theme = useTheme();
+
+  useEffect(() => {
+    fetchNFTs().then((items) => {
+      setNfts(items);
+      setNftsCopy(items);
+      setIsLoading(false);
+    });
+  }, []);
 
   useEffect(() => {
     const sortedNfts = [...nfts];
@@ -37,15 +48,6 @@ const Home = () => {
         break;
     }
   }, [activeSelect]);
-
-  useEffect(() => {
-    fetchNFTs().then((items) => {
-      setNfts(items);
-      setNftsCopy(items);
-      setIsLoading(false);
-      console.log(items);
-    });
-  }, []);
 
   const onHandleSearch = (value) => {
     const filteredNfts = nfts.filter(({ name }) => name.toLowerCase().includes(value.toLowerCase()));
@@ -132,7 +134,7 @@ const Home = () => {
                         layout="fill"
                         objectFit="contain"
                         alt="left_arrow"
-                        className={theme === 'light' && 'filter invert'}
+                        className={theme === 'light' ? 'filter invert' : ''}
                       />
                     </div>
                     <div onClick={() => { handleScroll('right'); }} className="absolute w-8 h-8 minlg:w-12 minlg:h-12 top-45 cursor-pointor right-0">
@@ -141,7 +143,7 @@ const Home = () => {
                         layout="fill"
                         objectFit="contain"
                         alt="left_arrow"
-                        className={theme === 'light' && 'filter invert'}
+                        className={theme === 'light' ? 'filter invert' : ''}
                       />
                     </div>
                   </>
